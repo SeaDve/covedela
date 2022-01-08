@@ -6,11 +6,12 @@
     <property name="default-height">320</property>
     <child>
       <object class="GtkBox">
-        <property name="margin">6</property>
         <property name="spacing">6</property>
+        <property name="margin">12</property>
         <child>
           <object class="GtkBox">
             <property name="orientation">vertical</property>
+            <property name="spacing">6</property>
             <child>
               <object class="GtkLabel">
                 <property name="label" translatable="yes">Tasks</property>
@@ -25,7 +26,6 @@
                 <property name="vexpand">True</property>
                 <child>
                   <object class="GtkListBox" id="_task_view">
-                    <property name="margin">6</property>
                     <style>
                       <class name="content"/>
                     </style>

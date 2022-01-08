@@ -14,12 +14,23 @@ class Application(Gtk.Application):
         Gtk.Application.do_startup(self)
 
         self.load_css()
+        self.setup_actions()
 
     def do_activate(self):
         win = self.props.active_window
         if not win:
             win = Window(application=self)
         win.show_all()
+
+    def on_quit(self, action, args):
+        self.quit()
+
+    def setup_actions(self):
+        quit_action = Gio.SimpleAction.new('quit', None)
+        quit_action.connect('activate', self.on_quit)
+        self.add_action(quit_action)
+
+        self.set_accels_for_action('app.quit', ('<Control>q',))
 
     def load_css(self):
         Handy.init()
