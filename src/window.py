@@ -1,8 +1,9 @@
-from gi.repository import Gtk, GLib, Gio, Handy
+from gi.repository import Gtk, GLib, Handy
 
 from task_row import TaskRow
 from task import Task
 from clock import Clock
+from task_list import TaskList
 
 
 @Gtk.Template(filename="src/window.ui")
@@ -31,7 +32,7 @@ class Window(Handy.ApplicationWindow):
         GLib.timeout_add(200, self._refresh_clock)
 
     def _setup_task_view(self):
-        model = Gio.ListStore.new(Task)
+        model = TaskList()
 
         for index, val in enumerate(range(10)):
             model.append(Task(f"Task # {index}"))
