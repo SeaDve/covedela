@@ -1,5 +1,9 @@
-.clock-label {
+.time-label {
   font-size: 300%;
   font-weight: bold;
+  font-feature-settings: "tnum";
+}
+
+.date-label {
   font-feature-settings: "tnum";
 }

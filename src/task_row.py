@@ -2,6 +2,7 @@ from gi.repository import Gtk, GObject, Handy
 
 from task import Task
 
+
 @Gtk.Template(filename="src/task_row.ui")
 class TaskRow(Handy.ExpanderRow):
     __gtype_name__ = "CvdlTaskRow"
@@ -18,7 +19,7 @@ class TaskRow(Handy.ExpanderRow):
     def task(self):
         return self._task
 
-    @task.setter
+    @task.setter  # type: ignore
     def task(self, val: Task):
         self._task = val
 
@@ -26,4 +27,4 @@ class TaskRow(Handy.ExpanderRow):
             self._title_binding.unbind()
 
         self._task.bind_property("title", self, "title", flags=GObject.BindingFlags.SYNC_CREATE)
-        self._task.notify("title") # IDK why is this needed
+        self._task.notify("title")  # IDK why is this needed

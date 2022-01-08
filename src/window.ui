@@ -6,7 +6,7 @@
     <property name="default-height">320</property>
     <child>
       <object class="GtkBox">
-        <property name="spacing">6</property>
+        <property name="spacing">12</property>
         <property name="margin">12</property>
         <child>
           <object class="GtkBox">
@@ -39,13 +39,7 @@
           <object class="GtkBox">
             <property name="orientation">vertical</property>
             <child>
-              <object class="GtkLabel" id="_clock_label">
-                <property name="label">00:00:00</property>
-                <property name="margin">6</property>
-                <style>
-                  <class name="clock-label"/>
-                </style>
-              </object>
+              <object class="CvdlClock" id="_clock"/>
             </child>
           </object>
         </child>

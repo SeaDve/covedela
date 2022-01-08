@@ -1,5 +1,6 @@
 from gi.repository import GObject
 
+
 class Task(GObject.GObject):
 
     title = GObject.Property(type=str)

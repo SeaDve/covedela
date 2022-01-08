@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CvdlClock" parent="GtkBin">
+    <child>
+      <object class="GtkBox">
+        <property name="spacing">3</property>
+        <property name="orientation">vertical</property>
+        <child>
+          <object class="GtkLabel" id="_time_label">
+            <property name="label">Loading time…</property>
+            <style>
+              <class name="time-label"/>
+            </style>
+          </object>
+        </child>
+        <child>
+          <object class="GtkLabel" id="_date_label">
+            <property name="label">Loading date…</property>
+            <style>
+              <class name="date-label"/>
+            </style>
+          </object>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

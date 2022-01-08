@@ -5,6 +5,7 @@ from gi.repository import Gtk, Gdk, Gio, Handy
 
 from window import Window
 
+
 class Application(Gtk.Application):
 
     def __init__(self):
