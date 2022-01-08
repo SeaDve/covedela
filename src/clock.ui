@@ -7,7 +7,7 @@
         <property name="orientation">vertical</property>
         <child>
           <object class="GtkLabel" id="_time_label">
-            <property name="label">Loading time…</property>
+            <property name="label" translatable="yes">Loading time…</property>
             <style>
               <class name="time-label"/>
             </style>
@@ -15,7 +15,7 @@
         </child>
         <child>
           <object class="GtkLabel" id="_date_label">
-            <property name="label">Loading date…</property>
+            <property name="label" translatable="yes">Loading date…</property>
             <style>
               <class name="date-label"/>
             </style>
