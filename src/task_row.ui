@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<interface>
+  <template class="CvdlTaskRow" parent="HdyExpanderRow">
+    <child>
+      <object class="GtkBox">
+        <child>
+          <object class="GtkLabel" id="_title_label"/>
+        </child>
+      </object>
+    </child>
+  </template>
+</interface>

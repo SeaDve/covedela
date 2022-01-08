@@ -2,15 +2,17 @@ from gi.repository import Gtk, GObject, Handy
 
 from task import Task
 
+@Gtk.Template(filename="src/task_row.ui")
 class TaskRow(Handy.ExpanderRow):
+    __gtype_name__ = "CvdlTaskRow"
+
+    _title_label = Gtk.Template.Child()
 
     _task = None
     _title_binding = None
 
     def __init__(self):
         super().__init__()
-
-        self._build_ui()
 
     @GObject.Property(type=Task, default=_task)
     def task(self):
@@ -25,10 +27,3 @@ class TaskRow(Handy.ExpanderRow):
 
         self._task.bind_property("title", self, "title", flags=GObject.BindingFlags.SYNC_CREATE)
         self._task.notify("title") # IDK why is this needed
-
-    def _build_ui(self):
-        box = Gtk.Box()
-        self.add(box)
-
-        self._title_label = Gtk.Label()
-        box.add(self._title_label)
