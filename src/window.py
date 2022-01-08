@@ -15,10 +15,6 @@ class Window(Handy.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
-        # Default RPi display dimension
-        self.props.default_height = 320
-        self.props.default_width = 480
-
         self._setup_clock()
         self._setup_task_view()
 
