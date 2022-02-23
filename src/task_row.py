@@ -10,21 +10,15 @@ class TaskRow(Handy.ExpanderRow):
     _title_label = Gtk.Template.Child()
 
     _task = None
-    _title_binding = None
 
-    def __init__(self):
+    def __init__(self, task: Task):
         super().__init__()
 
-    @GObject.Property(type=Task, default=_task)
-    def task(self):
-        return self._task
-
-    @task.setter  # type: ignore
-    def task(self, val: Task):
-        self._task = val
-
-        if self._title_binding is not None:
-            self._title_binding.unbind()
-
-        self._task.bind_property("title", self, "title", flags=GObject.BindingFlags.SYNC_CREATE)
-        self._task.notify("title")  # IDK why is this needed
+        self._task = task
+        self._task.bind_property(
+            "title",
+            self,
+            "title",
+            flags=GObject.BindingFlags.SYNC_CREATE,
+        )
+        self._task.notify("title")  # Idk why is this needed

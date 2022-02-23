@@ -1,9 +1,13 @@
+from pathlib import Path
+
 from gi.repository import Gtk, GLib, Handy
 
 from task_row import TaskRow
 from task import Task
 from clock import Clock
 from task_list import TaskList
+
+SAVE_FILE_PATH = Path("/home/dave/abcde.txt")
 
 
 @Gtk.Template(filename="src/window.ui")
@@ -16,13 +20,15 @@ class Window(Handy.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
 
+        self._setup_signals()
         self._setup_clock()
         self._setup_task_view()
 
-    def _create_task_row(self, task: Task) -> TaskRow:
-        task_row = TaskRow()
-        task_row.props.task = task
-        return task_row
+    def _on_destroy(self, win):
+        self._task_list.save_to_file(SAVE_FILE_PATH)
+
+    def _setup_signals(self):
+        self.connect("destroy", self._on_destroy)
 
     def _refresh_clock(self):
         self._clock.refresh()
@@ -32,9 +38,9 @@ class Window(Handy.ApplicationWindow):
         GLib.timeout_add(200, self._refresh_clock)
 
     def _setup_task_view(self):
-        model = TaskList()
+        self._task_list = TaskList()
 
         for index, val in enumerate(range(10)):
-            model.append(Task(f"Task # {index}"))
+            self._task_list.append(Task(f"Task # {index}"))
 
-        self._task_view.bind_model(model, self._create_task_row)
+        self._task_view.bind_model(self._task_list, lambda task: TaskRow(task))
