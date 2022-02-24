@@ -9,7 +9,7 @@ from window import Window
 
 class Application(Gtk.Application):
     def __init__(self):
-        super().__init__()
+        super().__init__(application_id="io.github.seadve.Covedela")
 
     def do_startup(self):
         Gtk.Application.do_startup(self)

@@ -1,6 +1,6 @@
 from gi.repository import Gtk, GObject, Handy
 
-from task import Task
+from google_tasks.task import Task
 
 
 @Gtk.Template(filename="src/task_row.ui")
