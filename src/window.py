@@ -26,7 +26,7 @@ class Window(Handy.ApplicationWindow):
         self._setup_task_view()
 
         GLib.timeout_add(200, self._refresh_clock)
-        GLib.timeout_add_seconds(5, self._update_client)
+        GLib.timeout_add_seconds(2, self._update_client)
 
     def _on_destroy(self, win):
         self._task_list.save_to_file(SAVE_FILE_PATH)
@@ -37,6 +37,7 @@ class Window(Handy.ApplicationWindow):
 
     def _update_client(self):
         self._client.update()
+        print(">>> Updating client")
         return True
 
     def _setup_task_view(self):

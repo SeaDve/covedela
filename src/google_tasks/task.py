@@ -15,6 +15,10 @@ class TaskStatus(Enum):
 
 
 class Task(GObject.Object):
+    __gsignals__ = {
+        "attribute-changed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
+    }
+
     _client = None
     _proxy: Proxy
     _task_list = None
@@ -27,13 +31,20 @@ class Task(GObject.Object):
         self._proxy = Proxy(
             initial_data, self, self._push_updates_impl, self._pull_updates_impl
         )
-        self.update()
+        self._proxy.connect("attribute-changed", self._on_proxy_attribute_changed)
+
+    def update(self, other: Task):
+        if self._proxy.get_etag() == other._proxy.get_etag():
+            return
+
+        print(f"Different etag, actually updating task {self.props.title}")
+        self._proxy.update_data(other._proxy._data)
 
     def get_id(self) -> str:
         return self._proxy.get_id()
 
-    def update(self):
-        self._proxy.update()
+    def get_etag(self) -> str:
+        return self._proxy.get_etag()
 
     @GObject.Property(type=str)
     def title(self):
@@ -79,10 +90,25 @@ class Task(GObject.Object):
         return self._proxy.get_attribute("hidden")
 
     def _on_proxy_attribute_changed(self, proxy: Proxy, attribute_name: str):
-        if attribute_name == "title":
-            self.notify("title")
-        elif attribute_name == "updated":
-            self.notify("last-updated")
+        self.emit("attribute-changed", attribute_name)
+
+        attr_name_gobject_name_map = {
+            "title": "title",
+            "updated": "last-updated",
+            "parent": "parent-task-id",
+            "position": "position",
+            "status": "is-completed",
+            "due": "due-date",
+            "completed": "completed-date",
+            "deleted": "deleted",
+            "hidden": "hidden",
+        }
+
+        print(f">>> Task attribute changed: {attribute_name}")
+
+        gobject_name_from_attr_name = attr_name_gobject_name_map.get(attribute_name)
+        if gobject_name_from_attr_name is not None:
+            self.notify(gobject_name_from_attr_name)
 
     @staticmethod
     def _push_updates_impl(self, update_body: dict):

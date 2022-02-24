@@ -41,6 +41,17 @@ class Proxy(GObject.Object):
     def get_id(self) -> str:
         return self._data.get("id")
 
+    def get_etag(self) -> str:
+        return self._data.get("etag")
+
+    def update_data(self, new_data: dict):
+        old_data = dict(self._data)
+        self._data = new_data
+
+        for key, value in self._data.items():
+            if old_data.get(key) != new_data.get(key):
+                self.emit("attribute-changed", key)
+
     def update(self):
         self._pull_updates(notify=True)
 
@@ -60,4 +71,3 @@ class Proxy(GObject.Object):
             for key, value in self._data.items():
                 if old_data.get(key) != updated_data.get(key):
                     self.emit("attribute-changed", key)
-                    print(f">>> Attribute changed: {key}")
