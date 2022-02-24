@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from typing import TYPE_CHECKING, List, Optional
+from typing import TYPE_CHECKING, List, Optional, Dict
 
 from gi.repository import Gio, GObject
 
@@ -19,7 +19,7 @@ class TaskList(GObject.Object, Gio.ListModel):
 
     _client: Client
     _proxy: Proxy
-    _cached_tasks: List[Task] = []
+    _cached_tasks: Dict[str, Task] = {}
     _next_page_token: Optional[str] = None
 
     def __init__(self, client: Client, data: dict):
@@ -40,7 +40,7 @@ class TaskList(GObject.Object, Gio.ListModel):
     def update(self):
         self._proxy.update()
 
-        for task in self._cached_tasks:
+        for task in self._cached_tasks.values():
             task.update()
 
     def load_more_tasks(self):
@@ -54,7 +54,10 @@ class TaskList(GObject.Object, Gio.ListModel):
         )
 
         for item in response.get("items", []):
-            self._cached_tasks.append(Task.from_dict(item))
+            task = Task(self._client, self, item)
+            # task.connect("attribute-changed", self._on_items_changed, 1, 1) # TODO uncomment this
+            self._cached_tasks[task.get_id()] = task
+            self._on_items_changed(task, None, 0, 1)
 
         self._next_page_token = response.get("nextPageToken", [])
 
@@ -70,7 +73,7 @@ class TaskList(GObject.Object, Gio.ListModel):
     # GObject Virtual methods
     def do_get_item(self, position) -> Optional[Task]:
         try:
-            return self._cached_tasks[position]
+            return list(self._cached_tasks.values())[position]
         except IndexError:
             return None
 
@@ -81,6 +84,10 @@ class TaskList(GObject.Object, Gio.ListModel):
         return len(self._cached_tasks)
 
     # Private methods
+    def _on_items_changed(self, task: Task, pspec, removed: int, added: int) -> None:
+        position = list(self._cached_tasks.keys()).index(task.get_id())
+        self.items_changed(position, removed, added)
+
     def _on_proxy_attribute_changed(self, proxy: Proxy, attribute_name: str):
         if attribute_name == "title":
             self.notify("title")

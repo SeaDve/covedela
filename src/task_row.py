@@ -14,6 +14,8 @@ class TaskRow(Handy.ExpanderRow):
     def __init__(self, task: Task):
         super().__init__()
 
+        print(task._proxy._data)
+
         self._task = task
         self._task.bind_property(
             "title",
