@@ -48,6 +48,8 @@ class Proxy(GObject.Object):
         old_data = dict(self._data)
         self._data = new_data
 
+        print(">>> Proxy updating data")
+
         for key, value in self._data.items():
             if old_data.get(key) != new_data.get(key):
                 self.emit("attribute-changed", key)

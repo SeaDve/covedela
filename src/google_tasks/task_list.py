@@ -119,6 +119,7 @@ class TaskList(GObject.Object, Gio.ListModel):
 
     @staticmethod
     def _pull_updates_impl(self, body: dict) -> dict:
+        print(">>> TaskList pulling updates")
         response = (
             self._client.service().tasklists().get(tasklist=self.get_id()).execute()
         )

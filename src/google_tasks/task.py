@@ -37,8 +37,8 @@ class Task(GObject.Object):
         if self._proxy.get_etag() == other._proxy.get_etag():
             return
 
-        print(f"Different etag, actually updating task {self.props.title}")
         self._proxy.update_data(other._proxy._data)
+        print(f"Different etag, actually updating task {self.props.title}")
 
     def get_id(self) -> str:
         return self._proxy.get_id()
@@ -108,6 +108,7 @@ class Task(GObject.Object):
 
         gobject_name_from_attr_name = attr_name_gobject_name_map.get(attribute_name)
         if gobject_name_from_attr_name is not None:
+            print(f">>> Notifying gobject property {gobject_name_from_attr_name}")
             self.notify(gobject_name_from_attr_name)
 
     @staticmethod
@@ -118,6 +119,7 @@ class Task(GObject.Object):
 
     @staticmethod
     def _pull_updates_impl(self, body: dict) -> dict:
+        print(">>> Task pulling updates")
         response = (
             self._client.service()
             .tasks()
