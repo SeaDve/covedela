@@ -2,7 +2,7 @@ import gi
 
 gi.require_version("Gtk", "3.0")
 gi.require_version("Handy", "1")
-from gi.repository import Gtk, Gdk, Gio, Handy
+from gi.repository import Gtk, Gdk, Gio, Handy, GdkPixbuf
 
 from window import Window
 
@@ -22,10 +22,12 @@ class Application(Gtk.Application):
         if not win:
             win = Window(application=self)
         win.show_all()
+        win.fullscreen()
 
     def on_show_qr(self, *args):
         print("showing qr code")
-        image = Gtk.Image.new_from_file("qr.jpg")
+        pixbuf = GdkPixbuf.Pixbuf.new_from_file_at_size("qr.jpg", 300, 300)
+        image = Gtk.Image.new_from_pixbuf(pixbuf)
         window = Gtk.Window(transient_for=self.props.active_window, modal=True)
         window.add(image)
         window.show_all()
