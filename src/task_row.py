@@ -8,6 +8,7 @@ class TaskRow(Handy.ExpanderRow):
     __gtype_name__ = "CvdlTaskRow"
 
     _title_label = Gtk.Template.Child()
+    _check_button = Gtk.Template.Child()
 
     _task = None
 
@@ -17,10 +18,13 @@ class TaskRow(Handy.ExpanderRow):
         print(task._proxy._data)
 
         self._task = task
-        self._task.bind_property(
-            "title",
-            self,
-            "title",
-            flags=GObject.BindingFlags.SYNC_CREATE,
-        )
-        self._task.notify("title")  # Idk why is this needed
+        self._task.connect("notify::title", self._update_title)
+        self._task.connect("notify::is-completed", self._update_check_button)
+        self._update_title()
+        self._update_check_button()
+
+    def _update_title(self, *args) -> None:
+        self.props.title = self._task.title
+
+    def _update_check_button(self, *args) -> None:
+        self._check_button.props.active = self._task.props.is_completed

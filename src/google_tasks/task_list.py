@@ -44,11 +44,29 @@ class TaskList(GObject.Object, Gio.ListModel):
     def update(self):
         self._proxy.update()
 
-        for updated_task in self._get_tasks():
+        updated_tasks = self._get_tasks()
+
+        for updated_task in updated_tasks:
             stored_task = self._cached_tasks.get(updated_task.get_id())
             if stored_task is None:
+                self._cached_tasks[updated_task.get_id()] = updated_task
+                self._on_items_changed(updated_task, None, 0, 1)
                 continue
             stored_task.update(updated_task)
+
+        found = None
+
+        for task in self._cached_tasks.values():
+            for updated_task in updated_tasks:
+                if updated_task.get_id() == task.get_id():
+                    found = task
+
+        if found is None:
+            print(">>> TaskList removing")
+            self._cached_tasks.pop(task.get_id())
+            self._on_items_changed(task, None, 1, 0)
+        else:
+            print(">>> Still found, not removing")
 
     # GObject Properties
     @GObject.Property(type=str)
@@ -84,6 +102,8 @@ class TaskList(GObject.Object, Gio.ListModel):
                 .tasks()
                 .list(
                     tasklist=self.get_id(),
+                    showHidden=True,
+                    showCompleted=True,
                     maxResults=100,
                     pageToken=page_to_load,
                 )

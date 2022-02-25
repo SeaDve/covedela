@@ -1,6 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
   <template class="CvdlTaskRow" parent="HdyExpanderRow">
+    <child type="action">
+      <object class="GtkCheckButton" id="_check_button">
+        <property name="valign">center</property>
+      </object>
+    </child>
     <child>
       <object class="GtkBox">
         <child>

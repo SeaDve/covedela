@@ -14,6 +14,7 @@ SAVE_FILE_PATH = Path("/home/dave/abcde.txt")
 class Window(Handy.ApplicationWindow):
     __gtype_name__ = "CvdlWindow"
 
+    _refresh_button = Gtk.Template.Child()
     _task_list_title_label = Gtk.Template.Child()
     _task_view = Gtk.Template.Child()
     _clock: Clock = Gtk.Template.Child()
@@ -21,12 +22,12 @@ class Window(Handy.ApplicationWindow):
     def __init__(self, **kwargs):
         super().__init__(**kwargs)
         self.connect("destroy", self._on_destroy)
+        self._refresh_button.connect("clicked", self._update_client)
 
         self._client = Client()
         self._setup_task_view()
 
         GLib.timeout_add(200, self._refresh_clock)
-        GLib.timeout_add_seconds(3, self._update_client)
 
     def _on_destroy(self, win):
         self._task_list.save_to_file(SAVE_FILE_PATH)
@@ -35,10 +36,9 @@ class Window(Handy.ApplicationWindow):
         self._clock.refresh()
         return True
 
-    def _update_client(self):
+    def _update_client(self, *args):
         self._client.update()
         print(">>> Updating client")
-        return True
 
     def _setup_task_view(self):
         task_list = self._client.get_task_lists()[0]

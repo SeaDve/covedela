@@ -13,12 +13,25 @@
             <property name="orientation">vertical</property>
             <property name="spacing">6</property>
             <child>
-              <object class="GtkLabel" id="_task_list_title_label">
-                <property name="hexpand">True</property>
-                <property name="xalign">0</property>
-                <style>
-                  <class name="title-2"/>
-                </style>
+              <object class="GtkBox">
+                <child>
+                  <object class="GtkLabel" id="_task_list_title_label">
+                    <property name="hexpand">True</property>
+                    <property name="xalign">0</property>
+                    <style>
+                      <class name="title-2"/>
+                    </style>
+                  </object>
+                </child>
+                <child>
+                  <object class="GtkButton" id="_refresh_button">
+                    <child>
+                      <object class="GtkImage">
+                        <property name="icon-name">view-refresh-symbolic</property>
+                      </object>
+                    </child>
+                  </object>
+                </child>
               </object>
             </child>
             <child>

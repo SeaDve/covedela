@@ -35,7 +35,7 @@ class Proxy(GObject.Object):
         self._push_updates()
 
     def get_attribute(self, key: str) -> any:
-        self._pull_updates()
+        # self._pull_updates()
         return self._data.get(key)
 
     def get_id(self) -> str:
