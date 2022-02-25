@@ -31,6 +31,7 @@ class Application(Gtk.Application):
         window = Gtk.Window(transient_for=self.props.active_window, modal=True)
         window.add(image)
         window.show_all()
+        window.connect("button-press-event", lambda win, key: win.close())
         window.connect("key-press-event", lambda win, key: win.close())
         window.fullscreen()
 
