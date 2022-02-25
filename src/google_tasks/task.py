@@ -71,7 +71,10 @@ class Task(GObject.Object):
 
     @GObject.Property(type=object)  # Optional
     def due_date(self):
-        return datetime.fromisoformat(self._proxy.get_attribute("due"))
+        due = self._proxy.get_attribute("due")
+        if due is None:
+            return None
+        return datetime.strptime(due, "%Y-%m-%dT%H:%M:%S.%fZ")
 
     @GObject.Property(type=object)  # Optional
     def completed_date(self):

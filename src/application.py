@@ -23,10 +23,21 @@ class Application(Gtk.Application):
             win = Window(application=self)
         win.show_all()
 
+    def on_show_qr(self, *args):
+        print("showing qr code")
+        image = Gtk.Image.new_from_file("qr.jpg")
+        window = Gtk.Window(transient_for=self.props.active_window, modal=True)
+        window.add(image)
+        window.show_all()
+
     def on_quit(self, action, args):
         self.quit()
 
     def setup_actions(self):
+        show_qr_action = Gio.SimpleAction.new("show-qr", None)
+        show_qr_action.connect("activate", self.on_show_qr)
+        self.add_action(show_qr_action)
+
         quit_action = Gio.SimpleAction.new("quit", None)
         quit_action.connect("activate", self.on_quit)
         self.add_action(quit_action)
