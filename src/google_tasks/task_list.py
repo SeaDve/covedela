@@ -33,9 +33,9 @@ class TaskList(GObject.Object, Gio.ListModel):
         self.update()
 
         for task in self._get_tasks():
-            task.connect("attribute-changed", self._on_items_changed, 1, 1)
             self._cached_tasks[task.get_id()] = task
-            self._on_items_changed(task, None, 0, 1)
+            position = list(self._cached_tasks.keys()).index(task.get_id())
+            self.items_changed(position, 0, 1)
 
     # Public methods
     def get_id(self) -> str:
@@ -50,21 +50,26 @@ class TaskList(GObject.Object, Gio.ListModel):
             stored_task = self._cached_tasks.get(updated_task.get_id())
             if stored_task is None:
                 self._cached_tasks[updated_task.get_id()] = updated_task
-                self._on_items_changed(updated_task, None, 0, 1)
+                position = list(self._cached_tasks.keys()).index(updated_task.get_id())
+                self.items_changed(position, 0, 1)
                 continue
             stored_task.update(updated_task)
 
-        found = None
+        # FIXME broken
+        being_found: Task = None
+        is_found = False
 
         for task in self._cached_tasks.values():
             for updated_task in updated_tasks:
+                being_found = updated_task
                 if updated_task.get_id() == task.get_id():
-                    found = task
+                    is_found = True
 
-        if found is None:
+        if not is_found and being_found is not None:
             print(">>> TaskList removing")
-            self._cached_tasks.pop(task.get_id())
-            self._on_items_changed(task, None, 1, 0)
+            position = list(self._cached_tasks.keys()).index(being_found.get_id())
+            self._cached_tasks.pop(being_found.get_id())
+            self.items_changed(position, 1, 0)
         else:
             print(">>> Still found, not removing")
 
@@ -120,10 +125,6 @@ class TaskList(GObject.Object, Gio.ListModel):
                 break
 
         return tasks
-
-    def _on_items_changed(self, task: Task, pspec, removed: int, added: int) -> None:
-        position = list(self._cached_tasks.keys()).index(task.get_id())
-        self.items_changed(position, removed, added)
 
     def _on_proxy_attribute_changed(self, proxy: Proxy, attribute_name: str):
         if attribute_name == "title":

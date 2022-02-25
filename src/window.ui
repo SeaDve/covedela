@@ -30,6 +30,9 @@
                         <property name="icon-name">view-refresh-symbolic</property>
                       </object>
                     </child>
+                    <style>
+                      <class name="flat"/>
+                    </style>
                   </object>
                 </child>
               </object>

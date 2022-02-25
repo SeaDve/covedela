@@ -40,6 +40,10 @@ class Window(Handy.ApplicationWindow):
         self._client.update()
         print(">>> Updating client")
 
+    def _create_task_row(self, task) -> TaskRow:
+        print(task._proxy._data)
+        return TaskRow(task)
+
     def _setup_task_view(self):
         task_list = self._client.get_task_lists()[0]
         task_list.bind_property(
@@ -50,4 +54,4 @@ class Window(Handy.ApplicationWindow):
         )
         task_list.notify("title")
 
-        self._task_view.bind_model(task_list, lambda task: TaskRow(task))
+        self._task_view.bind_model(task_list, self._create_task_row)

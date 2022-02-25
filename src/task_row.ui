@@ -1,15 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <interface>
-  <template class="CvdlTaskRow" parent="HdyExpanderRow">
-    <child type="action">
-      <object class="GtkCheckButton" id="_check_button">
-        <property name="valign">center</property>
-      </object>
-    </child>
+  <template class="CvdlTaskRow" parent="GtkListBoxRow">
     <child>
       <object class="GtkBox">
+        <property name="orientation">horizontal</property>
+        <property name="margin">6</property>
         <child>
-          <object class="GtkLabel" id="_title_label"/>
+          <object class="GtkLabel" id="_title_label">
+            <property name="xalign">0</property>
+            <property name="hexpand">True</property>
+            <property name="use-markup">True</property>
+          </object>
+        </child>
+        <child>
+          <object class="GtkCheckButton" id="_check_button">
+            <property name="valign">center</property>
+            <property name="halign">end</property>
+          </object>
         </child>
       </object>
     </child>

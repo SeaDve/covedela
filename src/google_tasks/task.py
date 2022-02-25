@@ -15,10 +15,6 @@ class TaskStatus(Enum):
 
 
 class Task(GObject.Object):
-    __gsignals__ = {
-        "attribute-changed": (GObject.SignalFlags.RUN_LAST, None, (str,)),
-    }
-
     _client = None
     _proxy: Proxy
     _task_list = None
@@ -90,8 +86,6 @@ class Task(GObject.Object):
         return self._proxy.get_attribute("hidden")
 
     def _on_proxy_attribute_changed(self, proxy: Proxy, attribute_name: str):
-        self.emit("attribute-changed", attribute_name)
-
         attr_name_gobject_name_map = {
             "title": "title",
             "updated": "last-updated",
