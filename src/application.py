@@ -31,6 +31,7 @@ class Application(Gtk.Application):
         window = Gtk.Window(transient_for=self.props.active_window, modal=True)
         window.add(image)
         window.show_all()
+        window.fullscreen()
 
     def on_quit(self, action, args):
         self.quit()
