@@ -22,7 +22,7 @@ class Application(Gtk.Application):
         if not win:
             win = Window(application=self)
         win.show_all()
-        win.fullscreen()
+        # win.fullscreen()
 
     def on_show_qr(self, *args):
         print("showing qr code")
